@@ -1,0 +1,167 @@
+Akai LPD8 mk2 SysEx Protocol
+
+Sysex Protocol
+
+	F0 - SysEx Start
+	47 - Manufac IDL: Akai Electric Co. Ltd.
+	7F - Device: Model: LPD8
+	4C - Device: Version: mk2 (75: Original LPD8)
+
+	Software: (Outgoing message will have this header)
+
+		03 00 01 - Software: Request Program Data from Hardware (Get Program)
+			0# - Program # (1, 2, 3, 4), 0 RAM may work but needs to be tested
+
+		01 01 29 - Software: Send Program Data to Hardware (Send Program)
+			0# - (0: RAM, 1: Program 1, ..., 4: Program 4)
+			0# - Global Channel: (0: 1, ..., F: 16)
+			0# - Pressure Message: (0: Off, 1: Channel, 2: Polyphonic)
+			0# - Full Level: (0: On, 1: Off)
+			0# - Type: (0: Momentary, 1: Toggle)
+
+
+	Hardware: (Incoming message will have this header)
+
+		03 01 29 - Hardware: Send Program Data to Software (Reply for 03 00 01 Request)
+			0# - Program # (1, 2, 3, 4)
+
+
+	F7 - SysEx End
+
+
+Protocol Syntax
+
+Bytes
+	01-04	4-Byte Packet Header
+	05-07	3-Byte Function
+	08		1-Byte Program Parameter
+	09-172	164-Byte Data Block
+		09-12 4-Byte Global Data
+			09		1-Byte MIDI Global Channel
+			10		1-Byte Pressure Message
+			11		1-Byte Full Level
+			12		1-Byte Type
+		13-140 128-Byte Pad Data
+			13-28		16-Byte Pad 1
+				13		1-Byte P1 MIDI NT
+				14		1-Byte P1 MIDI CC
+				15		1-Byte P1 MIDI PG
+				16		1-Byte P1 MIDI Channel
+				17-22	6-Byte P1 Color Off
+					17	2-Byte P1 Color Hex RO
+					18	2-Byte P1 Color Hex RV
+					19	2-Byte P1 Color Hex GO
+					20	2-Byte P1 Color Hex GV
+					21	2-Byte P1 Color Hex BO
+					22	2-Byte P1 Color Hex BV
+				23-28	6-Byte P1 Color On
+					23	2-Byte P1 Color Hex RO
+					24	2-Byte P1 Color Hex RV
+					25	2-Byte P1 Color Hex GO
+					26	2-Byte P1 Color Hex GV
+					27	2-Byte P1 Color Hex BO
+					28	2-Byte P1 Color Hex BV
+			29-44		16-Byte Pad 2
+			45-60 		16-Byte Pad 3
+			61-76 		16-Byte Pad 4
+			77-92 		16-Byte Pad 5
+			93-108		16-Byte Pad 6
+			109-124		16-Byte Pad 7
+			125-140		16-Byte Pad 8
+		141-172 32-Byte Knob Data
+			141-144 4-Byte Knob 1
+				140		1-Byte K1 MIDI CC
+				141		1-Byte K1 MIDI Channel
+				142		1-Byte K1 Min
+				143		1-Byte K1 Max
+			145-148	4-Byte Knob 2
+			149-152	4-Byte Knob 3
+			153-156	4-Byte Knob 4
+			157-160	4-Byte Knob 5
+			161-164	4-Byte Knob 6
+			165-168	4-Byte Knob 7
+			169-172	4-Byte Knob 8
+	173		1-Byte Packet Closer
+
+Packet Header
+	SysEx Start
+		0xF0					[SysEx Packet Header Byte]
+	Manufacturer ID
+		0x47					[Akai Electric Co. Ltd.]
+	Header
+		0x7F 0x4C				[LPD8 mk2]
+Context
+	0x03 0x00 0x01				[Software Get]
+	0x01 0x01 0x29				[Software Set]
+	0x03 0x01 0x29				[Hardware Get Response]
+Global Data
+	Global MIDI Channel
+		0x00-0x0F				[1-16]
+	Global Pressure Message
+		0x00					[Off]
+		0x01					[Channel]
+		0x02					[Polyphonic]
+	Global Full Level
+		0x00					[On]
+		0x01					[Off]
+	Global Type
+		0x00					[Momentary]
+		0x01					[Toggle]
+Pad Data
+	Pad MIDI NT Note
+		0x00-0x7F				[0-127] *Notes are (C-1 to G9, respectively)
+	Pad MIDI CC Control Change
+		0x00-0x7F				[0-127]
+	Pad MIDI PG Program Change
+		0x00-0x7F				[0-127]
+	Pad MIDI Channel
+		0x00-0x0F				[1-16]
+		0x10					[Global MIDI Channel]
+	Pad Color Off*
+		Red
+			Overflow
+				0x00 				[Disabled: Byte 2 selects values from 0x00-0x7F]
+				0x01 				[Enabled: Byte 2 selects values from 0x80-0xFF]
+			Value
+				0x00-0x7F			[0-127, if Overflow is 0x00]
+				0x00-0x7F			[128-255 (Hex 0x80-0xFF), if Overflow is 0x01]
+		Green
+			Overflow
+				0x00-0x01			[Disable-Enable Overflow]
+			Value
+				0x00-0x7F			[0-127, or 128-255 if Overflow enabled]
+		Blue
+			Overflow
+				0x00-0x01
+			Value
+				0x00-0x7F
+	Pad Color On
+		Red
+			Overflow
+				0x00-0x01
+			Value
+				0x00-0x7F
+		Green
+			Overflow
+				0x00-0x01
+			Value
+				0x00-0x7F
+		Blue
+			Overflow
+				0x00-0x01
+			Value
+				0x00-0x7F
+Packet Closer
+	SysEx End
+		0xF7					[SysEx Packet Header Closing Byte]
+
+
+*Pad Color
+	Byte 1
+		0x00 Disabled: Byte 2 selects values from 0x00-0x7F,
+		0x01 Enabled: Byte 2 selects values from 0x80-0xFF,
+	Byte 2
+		Byte 1 Disabled: 0x00-0x7F is mapped to 0x00-0x7F (0-127)
+		Byte 1 Enabled:  0x00-0x7F is mapped to 0x80-0xFF (128-255)
+	*Hex Color Bytes are 0-255 (0x00-0xFF), LPD8mk2 Color Bytes are 0-128 (0x00-0x7F)
+	*Assumingly, bytes above 0x80 are reserved for the MIDI protocol

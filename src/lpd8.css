@@ -1,0 +1,473 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@800&family=Chivo+Mono:wght@600;700&display=swap');
+
+:root, #root {
+	width: 100%;
+	height: 100%;
+
+	--singleUnit: calc(.43ex);
+	/*
+	// --singleUnit: min(1.2mm, .32vw);
+	*/
+
+	--lpd8Width: calc(300 * var(--singleUnit));
+	--lpd8Height: calc(80 * var(--singleUnit));
+
+	/* Text Color */
+	--colorRed: rgb(194, 4, 48);
+	--colorWhite: #DDDDDD;
+
+	/* Pad Default Colors */
+	--colorPadOff: rgb(100, 100, 100);
+	--colorPadOffShadow: rgba(0, 0, 0, 0.25);
+	--colorPadCenter: hsl(70, 8%, 8%);
+
+	/* Control Pad Colors */
+	--colorControlPad: var(--colorPadOff);
+	--colorControlPadShadow: var(--colorPadOffShadow);
+	--colorControlPadOn: rgba(174, 4, 48, 1);
+	--colorControlPadOnShadow: rgba(174, 4, 48, 0.6);
+
+	--controlPadShadowSpread: calc(.75 * var(--singleUnit));
+	--controlPadShadowBlur: calc(1.5 * var(--singleUnit));
+	--controlButtonBorderRadius: calc(1 * var(--singleUnit));
+
+	/* Drum Pad Colors */
+	--colorDrumPad: var(--colorPadOff);
+	--colorDrumPadBorder: var(--colorPadOffShadow);
+	--colorDrumPadShadow: var(--colorPadOffShadow);
+
+	--drumPadShadowSpread: calc(.2 * var(--singleUnit));
+	--drumPadShadowBlur: calc(8 * var(--singleUnit));
+	--drumPadBorderRadius: calc(1.3 * var(--singleUnit));
+
+	--edgeBorderRadius: calc(1.3 * var(--singleUnit));
+	--edgeBorderWidth: calc(.8 * var(--singleUnit));
+
+	--frameBorderRadius: calc(1.3 * var(--singleUnit));
+	--frameBorderWidth: calc(.7 * var(--singleUnit));
+
+	--drumPadContainerWidth: calc(28*4 + 7*3);
+}
+
+
+/* Fonts/Colors/TextAlignment */
+
+.Archivo {
+	font-family: 'Archivo', sans-serif;
+	font-weight: 800;
+}
+
+.ChivoSemiBold {
+	font-family: 'Chivo Mono', monospace;
+	font-weight: 600;
+}
+
+.ChivoBold {
+	font-family: 'Chivo Mono', monospace;
+	font-weight: 700;
+}
+
+.bigText {
+	font-size: calc(6 * var(--singleUnit));
+}
+
+.smallText {
+	font-size: calc(2.2 * var(--singleUnit));
+}
+
+.centerSpanText {
+	white-space: nowrap;
+	display: flex;
+	justify-content: space-between;
+}
+
+.padLabel {
+	box-sizing: border-box;
+}
+
+.padSmallLabel {
+	justify-content: center;
+}
+
+.colorRed {
+	color: var(--colorRed);
+}
+
+.colorWhite {
+	color: var(--colorWhite);
+}
+
+/* Main container/frame */
+
+#LPD8mk2 {
+	width: var(--lpd8Width);
+	height: var(--lpd8Height);
+	position: relative;
+	margin: auto;
+	margin-top: calc(var(--singleUnit) * 10) !important;
+	margin-bottom: calc(var(--singleUnit) * 10) !important;
+
+	user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+}
+
+#frame {
+	box-sizing: border-box;
+	width: calc(294 * var(--singleUnit));
+	height: calc(78 * var(--singleUnit));
+	position: absolute;
+	top: calc(1 * var(--singleUnit));
+	left: calc(3 * var(--singleUnit));
+    background: hsl(70, 8%, 8%);
+	background-image: repeating-linear-gradient(-50deg, rgba(100,100,100, 0.15), rgba(100,100,100, 0.17) calc(var(--singleUnit) * .4), transparent calc(var(--singleUnit) * .4), transparent calc(var(--singleUnit) * 1)); /* Src: https://codepen.io/bitmap/pen/AzowBq */
+    background-size: 4px 4px;
+	border-radius: var(--frameBorderRadius);
+	border: var(--frameBorderWidth) solid black;
+	border-left: calc(.75 * var(--frameBorderWidth)) solid black;
+	border-right: calc(.75 * var(--frameBorderWidth)) solid black;
+}
+
+
+/* Edges */
+
+.edge {
+	position: absolute;
+	top: calc(-1 * var(--singleUnit)); /* Compensate for custom offset, makes edge bottom and top corner heights more visible */
+	height: calc(82 * var(--singleUnit)); /* Custom offset different from measurements in image */
+	box-sizing: border-box;
+	border-radius: var(--edgeBorderRadius);
+	border: var(--edgeBorderWidth) solid black;
+}
+
+.edgeContainer {
+	width: calc(3 * var(--singleUnit) * 3);
+	background: var(--colorRed);
+}
+
+.subEdge {
+	width: calc(6 * var(--singleUnit));
+	top: calc(-1 * var(--edgeBorderWidth));
+}
+
+#edgeLeft {
+	left: calc(-2 * var(--singleUnit));
+}
+
+#subEdgeLeft {
+	float: right;
+	right: calc(-1 * var(--edgeBorderWidth));
+}
+
+#edgeRight {
+	position: relative;
+	float: right;
+	right: calc(-2 * var(--singleUnit));
+}
+
+#subEdgeRight {
+	float: left;
+	left: calc(-1 * var(--edgeBorderWidth));
+}
+
+
+/* Logo */
+
+#logoContainer {
+	box-sizing: border-box;
+	position: absolute;
+	width: calc(31 * var(--singleUnit));
+	height: calc((6 + 1 + 2 + 2 + 6 + 1 + 2) * var(--singleUnit));
+	top: calc(5 * var(--singleUnit));
+	left: calc(4 * var(--singleUnit));
+}
+
+.logos {
+	box-sizing: border-box;
+	position: absolute;
+	width: 100%;
+	height: calc((6 + 1 + 2) * var(--singleUnit));
+	color: var(--colorWhite);
+}
+
+.logoSmallBottom {
+	margin-top: calc(-1 * var(--singleUnit));
+}
+
+#logoModel {
+	bottom: 0;
+}
+
+#logoModelBottom {
+	color: var(--colorRed);
+	bottom: 0;
+	letter-spacing: .125em;
+}
+
+
+/* Control Pads */
+
+.controlPadContainer {
+	box-sizing: border-box;
+	position: absolute;
+	width: calc(11 * var(--singleUnit));
+	height: calc((2 + 1 + 11) * var(--singleUnit));
+}
+
+.controlPad {
+	box-sizing: content-box;
+	position: absolute;
+	height: calc(11 * var(--singleUnit));
+	width: calc(11 * var(--singleUnit));
+	bottom: 0;
+
+	border: calc(.2 * var(--singleUnit)) solid var(--colorControlPadShadow);
+	border-radius: var(--controlButtonBorderRadius);
+
+	z-index: 20;
+	background: var(--colorControlPad);
+	box-shadow: 0 0 var(--controlPadShadowBlur) var(--controlPadShadowSpread) var(--colorControlPadShadow);
+}
+
+.controlPadMiddle {
+	position: absolute;
+	width: calc(9 * var(--singleUnit));
+	height: calc(9 * var(--singleUnit));
+	top: calc(1 * var(--singleUnit));
+	left: calc(1 * var(--singleUnit));
+	background: var(--colorPadCenter);
+	border-radius: calc(var(--controlButtonBorderRadius) - (.5 * var(--singleUnit)));
+}
+
+#controlPadsContainer {
+	box-sizing: border-box;
+	position: absolute;
+	width: calc((11 + 4 + 11) * var(--singleUnit));
+	height: calc((2 + 1 + 11 + 4 + 11) * var(--singleUnit));
+	left: calc(5 * var(--singleUnit));
+	bottom: calc(8 * var(--singleUnit));
+}
+
+	/* Program */
+#controlPadProgramPad {
+	box-sizing: content-box;
+	border: 1px solid var(--colorPadOffShadow);
+	border-radius: var(--controlButtonBorderRadius);
+
+	z-index: 20;
+	background: hsl(70, 8%, 8%);
+	box-shadow: inset 0 0 calc(var(--controlPadShadowBlur) * .5) calc(var(--controlPadShadowSpread) * .2) var(--colorPadOffShadow);
+}
+
+	/* Note */
+#controlPadNote {
+	right: 0;
+}
+
+	/* Prog Chng */
+#controlPadProgChng {
+	bottom: 0;
+}
+
+	/* CC */
+#controlPadCC {
+	bottom: 0;
+	right: 0;
+}
+
+
+/* Drum Pads */
+
+.drumPadContainer {
+	box-sizing: border-box;
+	position: absolute;
+	width: calc(28 * var(--singleUnit));
+	height: calc((2 + 1 + 28) * var(--singleUnit));
+}
+
+.drumPadLabel {
+	box-sizing: border-box;
+}
+
+.drumPad {
+	box-sizing: border-box;
+	position: absolute;
+	height: calc((28 - (var(--padDown)*1.15)) * var(--singleUnit));
+	width: calc((28 - (var(--padDown)*1.2)) * var(--singleUnit));
+	right: 0;
+	bottom: 0;
+	background: none;
+	z-index: 20;
+	
+	border: calc(.2 * var(--singleUnit)) solid var(--colorDrumPadBorder);
+	border-radius: var(--drumPadBorderRadius);
+	border-top: calc(var(--singleUnit)) solid rgba(5, 5, 5, calc(var(--padDown) * .5));
+	border-left: calc(var(--singleUnit)) solid rgba(5, 5, 5, calc(var(--padDown) * .5));
+	border-right: calc(var(--singleUnit)*3) solid rgba(5, 5, 5, calc(var(--padDown) * .15));
+	border-bottom-color: var(--colorDrumPadBorder);
+	border-bottom-left-radius: calc(0.7 * var(--drumPadBorderRadius));
+	border-bottom-right-radius: calc(0.7 * var(--drumPadBorderRadius));
+	box-shadow: inset 0 0 var(--drumPadShadowBlur) var(--drumPadShadowSpread) var(--colorPadOffShadow), 0 0 calc(var(--drumPadShadowBlur) - (var(--padDown) * .5 * var(--drumPadShadowBlur))) calc(var(--drumPadShadowSpread) - (var(--padDown) * .45 * var(--drumPadShadowSpread))) var(--colorDrumPadShadow);
+}
+
+.drumPadOff {
+	box-sizing: border-box;
+	position: absolute;
+	height: calc((28 - (var(--padDown)*1.15)) * var(--singleUnit));
+	width: calc((28 - (var(--padDown)*1.2)) * var(--singleUnit));
+	right: 0;
+	bottom: 0;
+	background: var(--colorPadCenter);
+	border-radius: var(--drumPadBorderRadius);
+	border-bottom-left-radius: calc(0.7 * var(--drumPadBorderRadius));
+	border-bottom-right-radius: calc(0.7 * var(--drumPadBorderRadius));
+	z-index: 20;
+
+	border: calc(.2 * var(--singleUnit)) solid var(--colorPadOffShadow);
+	border-bottom-color: var(--colorDrumPad);
+	box-shadow: inset 0 0 var(--drumPadShadowBlur) var(--drumPadShadowSpread) var(--colorPadOffShadow), 0 0 var(--drumPadShadowBlur) var(--drumPadShadowSpread) var(--colorPadOffShadow);
+	filter: drop-shadow(calc((var(--singleUnit) * 1.2) - (var(--padDown) * .5 * var(--singleUnit))) calc((var(--singleUnit) * 1.2) - (var(--padDown) * .5 * var(--singleUnit))) var(--colorDrumPad));
+}
+
+#drumPadsContainer {
+	position: absolute;
+	box-sizing: border-box;
+	width: calc(var(--drumPadContainerWidth) * var(--singleUnit));
+	height: calc((2 + 1 + 7 + 28*2) * var(--singleUnit));
+	top: calc(4 * var(--singleUnit));
+	left: calc((4 + 31 + 5) * var(--singleUnit));
+}
+
+#drumPad1 {
+	--padDown: 0;
+	bottom: 0;
+}
+
+#drumPad2 {
+	--padDown: 0;
+	bottom: 0;
+	left: calc(((28 + 7)*1) * var(--singleUnit));
+}
+
+#drumPad3 {
+	--padDown: 0;
+	bottom: 0;
+	left: calc(((28 + 7)*2) * var(--singleUnit));
+}
+
+#drumPad4 {
+	--padDown: 0;
+	bottom: 0;
+	left: calc(((28 + 7)*3) * var(--singleUnit));
+}
+
+#drumPad5 {
+	--padDown: 0;
+}
+
+#drumPad6 {
+	--padDown: 0;
+	left: calc(((28 + 7)*1) * var(--singleUnit));
+}
+
+#drumPad7 {
+	--padDown: 0;
+	left: calc(((28 + 7)*2) * var(--singleUnit));
+}
+
+#drumPad8 {
+	--padDown: 0;
+	left: calc(((28 + 7)*3) * var(--singleUnit));
+}
+
+
+/* Knobs */
+
+.knob {
+	position: absolute;
+	width: calc(20 * var(--singleUnit));
+	height: calc(22  * var(--singleUnit));
+}
+
+.knobLabel {
+	width: 100%;
+	height: calc(2 * var(--singleUnit));
+}
+
+.knobWheel {
+	position: absolute;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: calc(18 * var(--singleUnit));
+	height: calc(18 * var(--singleUnit));
+	top: calc(2 * var(--singleUnit));
+	left: calc(1 * var(--singleUnit));
+}
+
+.knobSVGGraphic {
+	transform: translate(50%, 50%) rotate(var(--rot)) scale(1.5);
+}
+
+.knob .knobWheel svg {
+	overflow: hidden;
+	
+	--rot: 0deg;
+}
+
+.knobDots {
+	position: absolute;
+	right: 0;
+	left: 0;
+	margin-right: auto;
+	margin-left: auto;
+	width: 80%;
+	height: calc(2 * var(--singleUnit));
+	bottom: 0;
+	display: flex;
+	align-items: center;
+}
+
+.knobDotLeft {
+	position: absolute;
+	width: calc(.5 * var(--singleUnit));
+	height: calc(.5 * var(--singleUnit));
+	border-radius: calc(.5 * var(--singleUnit));
+	background: var(--colorWhite);
+	box-shadow: 0 0 calc(.1 * var(--singleUnit)) calc(.1 * var(--singleUnit)) var(--colorWhite);
+}
+
+.knobDotRight {
+	position: absolute;
+	width: calc(1 * var(--singleUnit));
+	height: calc(1 * var(--singleUnit));
+	right: 0;
+	border-radius: calc(1 * var(--singleUnit));
+	background: var(--colorWhite);
+	box-shadow: 0 0 calc(.1 * var(--singleUnit)) calc(.1 * var(--singleUnit)) var(--colorWhite);
+}
+
+.knobCol2 {
+	left: calc(1 * (20 + 10) * var(--singleUnit));
+}
+
+.knobCol3 {
+	left: calc(2 * (20 + 10) * var(--singleUnit));
+}
+
+.knobCol4 {
+	left: calc(3 * (20 + 10) * var(--singleUnit));
+}
+
+.bottomKnobRow {
+	top: calc(34  * var(--singleUnit));
+}
+
+#knobContainer {
+	position: absolute;
+	width: calc((80 + 24) * var(--singleUnit));
+	top: calc(10 * var(--singleUnit));
+	right: calc(10 * var(--singleUnit));
+}
